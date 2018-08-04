@@ -57,11 +57,11 @@ var waitlist = [{
 
 // Basic route that sends the user first to the AJAX Page
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "home.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/table", function (req, res) {
-    res.sendFile(path.join(__dirname, "Tablehtml.html"));
+    res.sendFile(path.join(__dirname, "tablehtml.html"));
 });
 
 app.get("/reserve", function (req, res) {
@@ -108,10 +108,11 @@ app.post("/api/waitlist", function (req, res) {
     res.json(newWaitlist);
 });
 
-app.post("/api/cleartable", function (req, res) {
+app.get("/api/cleartable", function (req, res) {
     tables = []
     waitlist = []
-    return res.json(tables, waitlist)
+    res.json(tables)
+    res.json(waitlist)
 
 })
 

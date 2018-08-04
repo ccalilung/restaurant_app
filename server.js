@@ -88,10 +88,13 @@ app.post("/api/table", function (req, res) {
     if (tables.length < 5 && waitlist.length === 0) {
         tables.push(newTable)
     }
-        if (tables.length < 5 && waitlist.length !==0) {
+        else if (tables.length < 5 && waitlist.length !==0) {
             waitListToTables()
             waitlist.push(newTable)
-    } 
+    } else  {
+        waitlist.push(newTable)
+    }
+    
 
     console.log(newTable);
     res.json(newTable);

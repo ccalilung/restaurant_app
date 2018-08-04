@@ -61,7 +61,7 @@ app.get("/", function (req, res) {
 });
 
 app.get("/table", function (req, res) {
-    res.sendFile(path.join(__dirname, "Tablehtmle.html"));
+    res.sendFile(path.join(__dirname, "Tablehtml.html"));
 });
 
 app.get("/reserve", function (req, res) {
@@ -73,6 +73,8 @@ app.get("/api/table", function (req, res) {
     return res.json(tables);
 });
 
+
+
 // Displays all tables
 app.get("/api/waitlist", function (req, res) {
     return res.json(waitlist);
@@ -83,28 +85,35 @@ app.post("/api/table", function (req, res) {
     // req.body hosts is equal to the JSON post sent from the user
     // This works because of our body-parser middleware
     var newTable = req.body;
-    if (tables.length < 5) {
+    if (tables.length < 5 && waitlist.length === 0) {
         tables.push(newTable)
-        waitListToTables()
+    }
+        if (tables.length < 5) {
+            waitListToTables()
+            waitlist.push(newTable)
     } else {
-        app.post("/api/waitlist", function (req, res) {
-            // req.body hosts is equal to the JSON post sent from the user
-            // This works because of our body-parser middleware
-            var newWaitlist = req.body;
-            console.log(newWaitlist);
-            waitlist.push(newWaitlist);
-            res.json(newWaitlist);
-        });
+       waitlist.push(newTable)
     }
 
-
     console.log(newTable);
-
-
     res.json(newTable);
 });
 
+app.post("/api/waitlist", function (req, res) {
+    // req.body hosts is equal to the JSON post sent from the user
+    // This works because of our body-parser middleware
+    var newWaitlist = req.body;
+    console.log(newWaitlist);
+    waitlist.push(newWaitlist);
+    res.json(newWaitlist);
+});
 
+app.post("/api/cleartable", function (req, res) {
+    tables = []
+    waitlist = []
+    return res.json(tables, waitlist)
+
+})
 
 function waitListToTables() {
     if (tables.length < 5) {
@@ -112,6 +121,11 @@ function waitListToTables() {
         waitlist.splice(0, 1)
         waitListToTables()
     }
+}
+
+function clear() {
+    tables = []
+    waitlist = []
 }
 // Starts the server to begin listening
 // =============================================================
